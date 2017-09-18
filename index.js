@@ -3,17 +3,26 @@ const app = express();
 const bodyParser = require('body-parser');
 const handleStartRequest = require('./lib/startRun');
 
-let processes = [];
+
+const storage = require('./lib/storage');
+
 
 app.use(bodyParser.urlencoded({ extended: false }))
 
-app.post('/', handleStartRequest);
+app.post('/', async function (req, res) {
+    let runId = await handleStartRequest(req.body.baseUrl, req.body.script);
+
+    res.setHeader('Content-Type', 'text/plain')
+    res.status(200).send(runId);
+});
 
 // get status
-app.get('/:runId', function (req, res) {
+app.get('/:runId', async function (req, res) {
     let runId = req.params.runId;
 
-    res.send(200);
+    let results = await storage.getResults(runId);
+
+    res.status(200).send(results);
 })
 
 app.listen(3000, function () {
