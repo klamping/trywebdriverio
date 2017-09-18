@@ -1,0 +1,29 @@
+{
+  "name": "trywebdriverio",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klamping/trywebdriverio.git"
+  },
+  "author": "Kevin Lamping",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/klamping/trywebdriverio/issues"
+  },
+  "homepage": "https://github.com/klamping/trywebdriverio#readme",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "chai": "^4.1.2",
+    "chai-webdriverio": "^0.4.2",
+    "express": "^4.15.4",
+    "wdio-mocha-framework": "^0.5.11",
+    "wdio-selenium-standalone-service": "0.0.9",
+    "wdio-spec-reporter": "^0.1.2",
+    "webdriverio": "^4.8.0"
+  }
+}
