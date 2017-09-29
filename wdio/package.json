@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "wdio"
   },
   "repository": {
     "type": "git",
@@ -17,14 +17,13 @@
   },
   "homepage": "https://github.com/klamping/trywebdriverio#readme",
   "dependencies": {
-    "body-parser": "^1.18.1",
-    "busboy": "^0.2.14",
-    "express": "^4.15.4",
-    "express-busboy": "^6.0.1",
-    "nedb": "^1.8.0",
-    "promise": "^8.0.1",
-    "temp": "^0.8.3",
-    "ws": "^3.2.0"
-  },
-  "devDependencies": {}
+    "chai": "^4.1.2",
+    "chai-webdriverio": "^0.4.2",
+    "mocha": "^3.5.3",
+    "wdio-json-reporter": "^0.2.1",
+    "wdio-mocha-framework": "^0.5.11",
+    "wdio-selenium-standalone-service": "0.0.9",
+    "wdio-spec-reporter": "^0.1.2",
+    "webdriverio": "^4.8.0"
+  }
 }
