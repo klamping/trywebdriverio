@@ -6,9 +6,6 @@
   </head>
   <body>
     <form id="test-form">
-      <button id="wsButton" type="button" title="Open WebSocket connection">
-        Open WebSocket connection
-      </button>
       <h1>Write your test</h1>
       <label>URL to test <input type="url" id="baseUrl" value="http://brenebrown.com/" name="baseUrl" /></label><br/>
       <textarea id="code" name="script" style="height:400px;width:98%;">
@@ -26,6 +23,7 @@
       </button><br/>
     </form>
     <pre id="messages" style="height: 400px; overflow: scroll"></pre>
+    <script src="ansi_up.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

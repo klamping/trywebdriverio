@@ -11,7 +11,16 @@ bb.extend(app);
 
 app.post('/run/', async function (req, res) {
     try {
-        let runId = await handleStartRequest(req.body.baseUrl, req.body.script);
+        let {runId, run} = await handleStartRequest(req.body.baseUrl, req.body.script);
+
+        run.stdout.on('data', res.send);
+
+        run.stderr.on('data', res.send);
+
+        run.on('close', (code) => {
+            // save data to database?
+            res.send(`child process exited with code ${code}`);
+        });
 
         res.setHeader('Content-Type', 'text/plain')
         res.send({ result: 'OK', message: runId });
@@ -30,23 +39,25 @@ app.get('/run/:runId', async function (req, res) {
     res.send({ result: 'OK', message: results });
 })
 
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 const server = http.createServer(app);
 
 const wss = new WebSocket.Server({server: server});
 
-wss.on('connection', (ws, req) => {
-  ws.on('message', (message) => {
-    wss.clients.forEach(function each(client) {
-      if (client !== ws && client.readyState === WebSocket.OPEN) {
-        client.send(message);
-      }
-    });
-
-    console.log(`WS message ${message}`);
+function broadcastMsg (message) {
+  wss.clients.forEach(function each(client) {
+    if (client !== ws && client.readyState === WebSocket.OPEN) {
+      client.send(message);
+    }
   });
-});
+}
+
+// wss.on('connection', (ws, req) => {
+//   ws.on('message', (message) => {
+
+//   });
+// });
 
 //
 // Start the server.

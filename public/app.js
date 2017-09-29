@@ -5,8 +5,11 @@
 
   let ws;
 
+  var a2h = new AnsiUp;
+
   const showMessage = (message) => {
     console.log(message);
+    message = a2h.ansi_to_html(message);
     messages.textContent += `\n${message}`;
     messages.scrollTop = messages.scrollHeight;
   };
@@ -24,7 +27,7 @@
 
     var form = new FormData(document.getElementById('test-form'));
 
-    fetch('/run', { method: 'POST', body: form })
+    fetch('http://localhost:3333/run', { method: 'POST', body: form })
       .then(handleResponse)
       .catch((err) => showMessage(err.message));
   };
@@ -35,7 +38,7 @@
       ws.close();
     }
 
-    ws = new WebSocket(`ws://${location.host}`);
+    ws = new WebSocket(`ws://localhost:3333`);
     ws.onmessage = (msg) => showMessage(msg.data);
     ws.onerror = () => showMessage('WebSocket error');
     ws.onopen = () => showMessage('WebSocket connection established');

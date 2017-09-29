@@ -1,0 +1,10 @@
+version: "3"
+services:
+  wdio:
+    build: .
+    depends_on:
+      - selenium
+  selenium:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"

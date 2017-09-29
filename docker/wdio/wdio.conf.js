@@ -1,10 +1,10 @@
-var CustomReporter = require('./lib/db-reporter.js');
-var WsReporter = require('./lib/ws-reporter.js');
-
 exports.config = {
   // Set a base URL in order to shorten url command calls. If your url parameter starts
   // with "/", then the base url gets prepended.
-  // baseUrl: 'http://replaceme/',
+  // baseUrl: '',
+
+  // host: 'selenium',
+  // port: 4444,
 
   //
   // ==================
@@ -15,9 +15,9 @@ exports.config = {
   // NPM script (see https://docs.npmjs.com/cli/run-script) then the current working
   // directory is where your package.json resides, so `wdio` will be called from there.
   //
-  // specs: [
-  //   './test/**/*.spec.js'
-  // ],
+  specs: [
+    './test/**/*.js'
+  ],
   // Patterns to exclude.
   // exclude: [
   //   './test/**/*.page.js'
@@ -122,11 +122,11 @@ exports.config = {
   // Test reporter for stdout.
   // The only one supported by default is 'dot'
   // see also: http://webdriver.io/guide/testrunner/reporters.html
-  reporters: [WsReporter, 'json'],
+  reporters: ['spec'],
 
-  reporterOptions: {
-    outputDir: './reports/'
-  },
+  // reporterOptions: {
+  //   outputDir: './reports/'
+  // },
 
   //
   // Options to be passed to Mocha.

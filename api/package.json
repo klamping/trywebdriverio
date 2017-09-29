@@ -19,6 +19,7 @@
   "dependencies": {
     "body-parser": "^1.18.1",
     "busboy": "^0.2.14",
+    "dockerode": "^2.5.1",
     "express": "^4.15.4",
     "express-busboy": "^6.0.1",
     "nedb": "^1.8.0",

@@ -10,7 +10,9 @@ const { spawn } = require('child_process');
 // Automatically track and cleanup files at exit
 temp.track();
 
-const ws = new WebSocket('ws://localhost:3000');
+function spawnRun (dirPath, baseUrl) {
+    return spawn('/usr/local/bin/docker', ['run', "-v", `${dirPath}:/wdio/test`, 'wdio', "--host", process.env.SELHOST, "--baseUrl", baseUrl]);
+}
 
 module.exports = async function (baseUrl, script) {
     let runId = await storage.startRun();
@@ -21,15 +23,7 @@ module.exports = async function (baseUrl, script) {
     // write script to file
     fs.writeFileSync(path.join(dirPath, 'test.js'), script);
 
-    let run = spawn(`/usr/local/bin/docker`, ["-v", `"${dirPath}":/wdio/test wdio`, "wdio", "--host", process.env.SELHOST, "--baseUrl", baseUrl]);
+    let run = spawnRun(dirPath, baseUrl);
 
-    run.stdout.on('data', (data) => {
-      console.log(`stdout: ${data}`);
-    });
-
-    run.stderr.on('data', (data) => {
-      console.log(`stderr: ${data}`);
-    });
-
-    return runId;
+    return {runId, run};
 }
