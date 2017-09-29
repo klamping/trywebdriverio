@@ -8,9 +8,8 @@
   var a2h = new AnsiUp;
 
   const showMessage = (message) => {
-    console.log(message);
     message = a2h.ansi_to_html(message);
-    messages.textContent += `\n${message}`;
+    messages.innerHTML += `\n${message}`;
     messages.scrollTop = messages.scrollHeight;
   };
 

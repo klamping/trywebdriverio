@@ -9,21 +9,25 @@ const storage = require('./lib/storage');
 
 bb.extend(app);
 
+const server = http.createServer(app);
+
+const wss = new WebSocket.Server({server: server});
+
+
 app.post('/run/', async function (req, res) {
     try {
         let {runId, run} = await handleStartRequest(req.body.baseUrl, req.body.script);
 
-        run.stdout.on('data', broadcast);
+        // run.stdout.on('data', res.send);
 
-        run.stderr.on('data', broadcast);
+        // run.stderr.on('data', res.send);
 
-        run.on('close', (code) => {
-            // save data to database?
-            broadcast(`child process exited with code ${code}`);
-        });
+        // run.on('close', (code) => {
+        //     // save data to database?
+        //     res.send(`child process exited with code ${code}`);
+        // });
 
         res.setHeader('Content-Type', 'text/plain')
-        res.header("Access-Control-Allow-Origin", "*");
         res.send({ result: 'OK', message: runId });
     } catch (err) {
       console.error(err.stack)
@@ -40,19 +44,13 @@ app.get('/run/:runId', async function (req, res) {
     res.send({ result: 'OK', message: results });
 })
 
-// app.use(express.static('public'));
-
-const server = http.createServer(app);
-
-const wss = new WebSocket.Server({server: server});
-
-function broadcast(data) {
+function broadcastMsg (message) {
   wss.clients.forEach(function each(client) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data.toString('utf8'));
+    if (client !== ws && client.readyState === WebSocket.OPEN) {
+      client.send(message);
     }
   });
-};
+}
 
 // wss.on('connection', (ws, req) => {
 //   ws.on('message', (message) => {

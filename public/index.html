@@ -3,20 +3,33 @@
   <head>
       <meta charset="utf-8">
       <title>Express session demo</title>
+      <style type="text/css">
+        input, textarea {
+          font-size: 1em;
+        }
+      </style>
   </head>
   <body>
     <form id="test-form">
       <h1>Write your test</h1>
-      <label>URL to test <input type="url" id="baseUrl" value="http://brenebrown.com/" name="baseUrl" /></label><br/>
+      <label>URL to test <input type="url" id="baseUrl" value="http://webdriver.io" name="baseUrl" /></label><br/>
       <textarea id="code" name="script" style="height:400px;width:98%;">
-  describe('the homepage', function () {
-    it('should load', function () {
-      browser.url('./');
-      let title = browser.getTitle();
-
-      expect(title).to.equal('Home - Brené Brown');
+describe('webdriver.io api page', function() {
+    it('should be able to filter for commands', function () {
+        browser.url('./api.html');
+        // filtering property commands
+        $('.searchbar input').setValue('getT');
+        // get all results that are displayed
+        var results = $$('.commands.property a').filter(function (link) {
+            return link.isVisible();
+        });
+        // assert number of results
+        expect(results.length).to.be.equal(3);
+        // check out second result
+        results[1].click();
+        expect($('.doc h1').getText()).to.be.equal('GETTEXT');
     });
-  });
+});
       </textarea><br/>
       <button id="run" type="button">
         Run Test
