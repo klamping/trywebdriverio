@@ -1,9 +1,8 @@
 const express = require('express');
 const http = require('http');
 const bb = require('express-busboy');
-const handleStartRequest = require('./lib/startRun');
+const startRun = require('./lib/startRun');
 const WebSocket = require('ws');
-const storage = require('./lib/storage');
 
 const app = express();
 
@@ -15,7 +14,7 @@ app.use(function (req, res) {
 
 async function runTest (testDeets, ws) {
   try {
-    let {runId, run} = await handleStartRequest(testDeets.baseUrl, testDeets.script);
+    let {runId, run} = await startRun(testDeets.baseUrl, testDeets.code);
 
     run.stdout.on('data', (data) => {
       ws.send(data.toString('utf8'));
@@ -26,6 +25,9 @@ async function runTest (testDeets, ws) {
     });
 
     run.on('close', (code) => {
+      if (code !== 0) {
+        // save broken screenshot?
+      }
       // save data to database?
       ws.send('Tests completed!');
     });

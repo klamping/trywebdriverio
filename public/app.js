@@ -34,9 +34,16 @@
     ws.onmessage = (msg) => {
       showMessage(msg.data)
     };
-    ws.onerror = () => showMessage('WebSocket error\n');
-    ws.onopen = () => showMessage('WebSocket connection established\n');
-    ws.onclose = () => { showMessage('WebSocket connection closed\n'); ws = null; };
+    ws.onerror = () => showMessage('WebSocket error');
+    ws.onopen = () => {
+      // undisable button
+      document.getElementById('run').disabled = false;
+    };
+    ws.onclose = () => {
+      showMessage('WebSocket connection closed');
+      ws = null;
+      document.getElementById('run').disabled = true;
+    };
   };
 
   run.onclick = () => {
@@ -46,7 +53,7 @@
 
     let data = {
       baseUrl: document.getElementById('baseUrl').value,
-      code: document.getElementById('code').value
+      code: editor.getValue()
     };
 
     ws.send(JSON.stringify(data));

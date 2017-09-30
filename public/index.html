@@ -7,13 +7,14 @@
         input, textarea {
           font-size: 1em;
         }
+
       </style>
   </head>
   <body>
     <form id="test-form">
       <h1>Write your test</h1>
       <label>URL to test <input type="url" id="baseUrl" value="http://webdriver.io" name="baseUrl" /></label><br/>
-      <textarea id="code" name="script" style="height:400px;width:98%;">
+      <pre id="code" name="script" style="height:400px;width:98%;">
 describe('webdriver.io api page', function() {
     it('should be able to filter for commands', function () {
         browser.url('./api.html');
@@ -29,14 +30,19 @@ describe('webdriver.io api page', function() {
         results[1].click();
         expect($('.doc h1').getText()).to.be.equal('GETTEXT');
     });
-});
-      </textarea><br/>
-      <button id="run" type="button">
+});</pre><br/>
+      <button id="run" type="button" disabled>
         Run Test
       </button><br/>
     </form>
     <pre id="messages" style="height: 400px; overflow: scroll"></pre>
     <script src="ansi_up.js"></script>
+    <script src="ace.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+        var editor = ace.edit("code");
+        editor.setTheme("ace/theme/monokai");
+        editor.session.setMode("ace/mode/javascript");
+    </script>
     <script src="app.js"></script>
   </body>
 </html>

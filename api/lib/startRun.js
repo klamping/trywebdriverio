@@ -8,11 +8,7 @@ const WebdriverIO = require('webdriverio');
 const { spawn } = require('child_process');
 
 // Automatically track and cleanup files at exit
-temp.track();
-
-function spawnRun (dirPath, baseUrl) {
-    return spawn('/usr/local/bin/docker', ['run', "-v", `${dirPath}:/wdio/test`, 'wdio', "--host", process.env.SELHOST, "--baseUrl", baseUrl]);
-}
+// temp.track();
 
 module.exports = async function (baseUrl, script) {
     let runId = await storage.startRun();
@@ -23,7 +19,7 @@ module.exports = async function (baseUrl, script) {
     // write script to file
     fs.writeFileSync(path.join(dirPath, 'test.js'), script);
 
-    let run = spawnRun(dirPath, baseUrl);
+    let run = spawn('/usr/local/bin/docker', ['run', "-v", `${dirPath}:/wdio/test`, 'wdio', "--host", process.env.SELHOST, "--baseUrl", baseUrl]);
 
     return {runId, run};
 }
