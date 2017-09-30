@@ -66,8 +66,6 @@ exports.config = {
   // Level of logging verbosity: silent | verbose | command | data | result | error
   logLevel: 'verbose',
   //
-  // Enables colors for log output.
-  coloredLogs: false,
   //
   // If you only want to run your tests until a specific amount of tests have failed use
   // bail (default is 0 - don't bail, run all tests).

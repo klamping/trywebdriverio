@@ -9,7 +9,12 @@
 
   const showMessage = (message) => {
     message = a2h.ansi_to_html(message);
-    messages.innerHTML += `\n${message}`;
+
+    if(message.indexOf("\n")==-1){
+      message += '\n';
+    }
+
+    messages.innerHTML += message;
     messages.scrollTop = messages.scrollHeight;
   };
 
@@ -19,18 +24,6 @@
       : Promise.reject(new Error('Unexpected response'));
   };
 
-  run.onclick = () => {
-    if (!ws) {
-      connect();
-    }
-
-    var form = new FormData(document.getElementById('test-form'));
-
-    fetch('http://localhost:3333/run', { method: 'POST', body: form })
-      .then(handleResponse)
-      .catch((err) => showMessage(err.message));
-  };
-
   function connect () {
     if (ws) {
       ws.onerror = ws.onopen = ws.onclose = null;
@@ -38,9 +31,26 @@
     }
 
     ws = new WebSocket(`ws://localhost:3333`);
-    ws.onmessage = (msg) => showMessage(msg.data);
-    ws.onerror = () => showMessage('WebSocket error');
-    ws.onopen = () => showMessage('WebSocket connection established');
-    ws.onclose = () => { showMessage('WebSocket connection closed'); ws = null; };
+    ws.onmessage = (msg) => {
+      showMessage(msg.data)
+    };
+    ws.onerror = () => showMessage('WebSocket error\n');
+    ws.onopen = () => showMessage('WebSocket connection established\n');
+    ws.onclose = () => { showMessage('WebSocket connection closed\n'); ws = null; };
   };
+
+  run.onclick = () => {
+    if (!ws) {
+      connect();
+    }
+
+    let data = {
+      baseUrl: document.getElementById('baseUrl').value,
+      code: document.getElementById('code').value
+    };
+
+    ws.send(JSON.stringify(data));
+  };
+
+  connect();
 })();

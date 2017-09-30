@@ -1,64 +1,56 @@
 const express = require('express');
-const app = express();
 const http = require('http');
-var bb = require('express-busboy');
+const bb = require('express-busboy');
 const handleStartRequest = require('./lib/startRun');
 const WebSocket = require('ws');
-
 const storage = require('./lib/storage');
+
+const app = express();
 
 bb.extend(app);
 
-app.post('/run/', async function (req, res) {
-    try {
-        let {runId, run} = await handleStartRequest(req.body.baseUrl, req.body.script);
-
-        run.stdout.on('data', broadcast);
-
-        run.stderr.on('data', broadcast);
-
-        run.on('close', (code) => {
-            // save data to database?
-            broadcast(`child process exited with code ${code}`);
-        });
-
-        res.setHeader('Content-Type', 'text/plain')
-        res.header("Access-Control-Allow-Origin", "*");
-        res.send({ result: 'OK', message: runId });
-    } catch (err) {
-      console.error(err.stack)
-      res.status(500).send('Something broke!')
-    }
+app.use(function (req, res) {
+  res.send({ msg: "hello" });
 });
 
-// get status
-app.get('/run/:runId', async function (req, res) {
-    let runId = req.params.runId;
+async function runTest (testDeets, ws) {
+  try {
+    let {runId, run} = await handleStartRequest(testDeets.baseUrl, testDeets.script);
 
-    let results = await storage.getRun(runId);
+    run.stdout.on('data', (data) => {
+      ws.send(data.toString('utf8'));
+    });
 
-    res.send({ result: 'OK', message: results });
-})
+    run.stderr.on('data', (data) => {
+      ws.send(data.toString('utf8'));
+    });
 
-// app.use(express.static('public'));
+    run.on('close', (code) => {
+      // save data to database?
+      ws.send('Tests completed!');
+    });
+
+    ws.send('Tests started');
+  } catch (err) {
+    console.error(err.stack)
+    ws.send('Something broke!')
+  }
+}
 
 const server = http.createServer(app);
 
-const wss = new WebSocket.Server({server: server});
+const wss = new WebSocket.Server({ server: server });
 
-function broadcast(data) {
-  wss.clients.forEach(function each(client) {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(data.toString('utf8'));
+wss.on('connection', (ws, req) => {
+  ws.on('message', (message) => {
+    // is request to run test?
+    let testDeets = JSON.parse(message);
+
+    if (testDeets.baseUrl && testDeets.code) {
+      runTest(testDeets, ws);
     }
   });
-};
-
-// wss.on('connection', (ws, req) => {
-//   ws.on('message', (message) => {
-
-//   });
-// });
+});
 
 //
 // Start the server.
