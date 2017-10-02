@@ -8,9 +8,9 @@ const app = express();
 
 bb.extend(app);
 
-app.use(function (req, res) {
-  res.send({ msg: "hello" });
-});
+// app.use(function (req, res) {
+//   res.send({ msg: "hello" });
+// });
 
 async function runTest (testDeets, ws) {
   try {

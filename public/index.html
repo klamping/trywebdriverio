@@ -4,17 +4,63 @@
       <meta charset="utf-8">
       <title>Express session demo</title>
       <style type="text/css">
-        input, textarea {
-          font-size: 1em;
+        html, body {
+          padding: 0;
+          margin: 0;
+        }
+
+        body {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+        }
+
+        input {
+          font-size: 1.2em;
+        }
+
+        .row {
+          display: flex;
+          flex-direction: row;
+        }
+
+        #header {
+          height: 4vh;
+        }
+
+        #codewrapper {
+          flex: 1;
+          position: relative;
+        }
+
+        #code, #messages {
+          flex: 1 0 50%;
+          margin: 0;
+        }
+
+        #run {
+          position: absolute;
+          top: 0;
+          right: 50%;
+          z-index: 10;
+          font-size: 1.3em;
+          padding: 10px;
+        }
+
+        #messages {
+          padding: 1em;
+          overflow: scroll;
+          max-height: 94vh;
         }
 
       </style>
   </head>
   <body>
-    <form id="test-form">
-      <h1>Write your test</h1>
-      <label>URL to test <input type="url" id="baseUrl" value="http://webdriver.io" name="baseUrl" /></label><br/>
-      <pre id="code" name="script" style="height:400px;width:98%;">
+    <div class="row" id="header">
+      <label class="url-container">URL to test <input type="url" id="baseUrl" value="http://webdriver.io" name="baseUrl" /></label>
+    </div>
+    <div class="row" id="codewrapper">
+      <pre id="code" name="script">
 describe('webdriver.io api page', function() {
     it('should be able to filter for commands', function () {
         browser.url('./api.html');
@@ -30,12 +76,12 @@ describe('webdriver.io api page', function() {
         results[1].click();
         expect($('.doc h1').getText()).to.be.equal('GETTEXT');
     });
-});</pre><br/>
+});</pre>
       <button id="run" type="button" disabled>
         Run Test
-      </button><br/>
-    </form>
-    <pre id="messages" style="height: 400px; overflow: scroll"></pre>
+      </button>
+      <pre id="messages"></pre>
+    </div>
     <script src="ansi_up.js"></script>
     <script src="ace.js" type="text/javascript" charset="utf-8"></script>
     <script>

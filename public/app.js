@@ -18,12 +18,6 @@
     messages.scrollTop = messages.scrollHeight;
   };
 
-  const handleResponse = (response) => {
-    return response.ok
-      ? response.json().then((data) => JSON.stringify(data, null, 2))
-      : Promise.reject(new Error('Unexpected response'));
-  };
-
   function connect () {
     if (ws) {
       ws.onerror = ws.onopen = ws.onclose = null;
@@ -32,6 +26,10 @@
 
     ws = new WebSocket(`ws://localhost:3333`);
     ws.onmessage = (msg) => {
+      if (msg.data == 'Tests completed!') {
+        document.getElementById('run').disabled = false;
+      }
+
       showMessage(msg.data)
     };
     ws.onerror = () => showMessage('WebSocket error');
@@ -55,6 +53,8 @@
       baseUrl: document.getElementById('baseUrl').value,
       code: editor.getValue()
     };
+
+    document.getElementById('run').disabled = true;
 
     ws.send(JSON.stringify(data));
   };
