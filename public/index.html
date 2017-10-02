@@ -4,91 +4,131 @@
       <meta charset="utf-8">
       <title>Express session demo</title>
       <style type="text/css">
+        @import url("http://fonts.googleapis.com/css?family=Lato:100,300,400,700");
+
         html, body {
           padding: 0;
           margin: 0;
+          color: #363333;
         }
 
         body {
           display: flex;
-          flex-direction: column;
+          flex-direction: row;
           min-height: 100vh;
         }
 
-        input {
-          font-size: 1.2em;
-        }
-
-        .row {
+        .col {
+          flex: 1 0 50%;
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
         }
 
-        #header {
-          height: 4vh;
+        h2, .url-container {
+          align-items: center;
+          height: 3rem;
+          box-sizing: border-box;
+          display: flex;
+          font-size: 1.3rem;
+          font-weight: bold;
+          margin: 0;
+          padding-left: 1em;
+          background: #ea5906;
+          color: #363333;
+          font-family: "Lato", sans-serif;
+        }
+
+        input {
+          flex: 1;
+          font-size: 1.3rem;
+          padding: .5rem;
+          margin: 2px 0 2px 1rem;
+          box-sizing: border-box;
+          background: #F6E9E9;
+          border: 0;
         }
 
         #codewrapper {
-          flex: 1;
           position: relative;
         }
-
-        #code, #messages {
-          flex: 1 0 50%;
+        #code {
+          flex: 1 0;
           margin: 0;
         }
 
         #run {
           position: absolute;
-          top: 0;
-          right: 50%;
+          top: 3rem;
+          right: 0%;
           z-index: 10;
           font-size: 1.3em;
-          padding: 10px;
+          padding: 10px 20px;
+          background: #363333;
+          color: #F6E9E9;
+          border: 0;
+          border-left: 1px solid #E2E2E2;
+          border-bottom: 1px solid #9B9494;
+        }
+        #run:hover,
+        #run:focus {
+          background: #686868;
+          cursor: pointer;
         }
 
+        #console {
+          max-width: 50vw;
+        }
         #messages {
-          padding: 1em;
+          flex: 1 0 auto;
+          margin: 0;
           overflow: scroll;
-          max-height: 94vh;
+          padding: 1em;
+          max-height: calc(100vh - 3rem);
+          box-sizing: border-box;
+          background: #F6E9E9;
         }
-
       </style>
+      <link href="theme.css" rel="stylesheet">
   </head>
   <body>
-    <div class="row" id="header">
-      <label class="url-container">URL to test <input type="url" id="baseUrl" value="http://webdriver.io" name="baseUrl" /></label>
-    </div>
-    <div class="row" id="codewrapper">
-      <pre id="code" name="script">
-describe('webdriver.io api page', function() {
-    it('should be able to filter for commands', function () {
-        browser.url('./api.html');
-        // filtering property commands
-        $('.searchbar input').setValue('getT');
-        // get all results that are displayed
-        var results = $$('.commands.property a').filter(function (link) {
-            return link.isVisible();
-        });
-        // assert number of results
-        expect(results.length).to.be.equal(3);
-        // check out second result
-        results[1].click();
-        expect($('.doc h1').getText()).to.be.equal('GETTEXT');
+    <div id="codewrapper" class="col">
+      <label class="url-container">Url To Test: <input type="url" id="baseUrl" value="http://webdriver.io" name="baseUrl" /></label>
+      <pre id="code" name="script">describe('webdriver.io api page', function() {
+  it('should be able to filter for commands', function () {
+    browser.url('./api.html');
+    // filtering property commands
+    $('.searchbar input').setValue('getT');
+    // get all results that are displayed
+    var results = $$('.commands.property a').filter(function (link) {
+        return link.isVisible();
     });
+    // assert number of results
+    expect(results.length).to.be.equal(3);
+    // check out second result
+    results[1].click();
+    expect($('.doc h1').getText()).to.be.equal('GETTEXT');
+  });
 });</pre>
       <button id="run" type="button" disabled>
         Run Test
       </button>
-      <pre id="messages"></pre>
     </div>
-    <script src="ansi_up.js"></script>
+    <div id="console" class="col">
+      <h2>Console Output:</h2>
+      <pre id="messages" class="tomorrow-night-eighties-ansi-theme"></pre>
+    </div>
+
     <script src="ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
         var editor = ace.edit("code");
         editor.setTheme("ace/theme/monokai");
+        editor.setOptions({
+          fontSize: "1em"
+        });
+        editor.setShowPrintMargin(false);
         editor.session.setMode("ace/mode/javascript");
     </script>
+    <script src="ansi_up.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

@@ -5,7 +5,9 @@
 
   let ws;
 
-  var a2h = new AnsiUp;
+  var a2h = new AnsiUp();
+
+  // a2h.use_classes = true;
 
   const showMessage = (message) => {
     message = a2h.ansi_to_html(message);
