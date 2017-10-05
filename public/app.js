@@ -26,7 +26,7 @@
       ws.close();
     }
 
-    ws = new WebSocket(`ws://localhost:3333`);
+    ws = new WebSocket(`ws://${location.host}`);
     ws.onmessage = (msg) => {
       if (msg.data == 'Tests completed!') {
         document.getElementById('run').disabled = false;
