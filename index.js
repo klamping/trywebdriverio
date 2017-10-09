@@ -12,17 +12,21 @@ bb.extend(app);
 //   res.send({ msg: "hello" });
 // });
 
+function sendMsg (ws, data) {
+  let msg = data.toString('utf8')
+
+  if (msg.indexOf('Starting docker_selenium') === -1) {
+    ws.send(data.toString('utf8'));
+  }
+}
+
 async function runTest (testDeets, ws) {
   try {
     let {runId, run} = await startRun(testDeets.baseUrl, testDeets.code);
 
-    run.stdout.on('data', (data) => {
-      ws.send(data.toString('utf8'));
-    });
+    run.stdout.on('data', sendMsg.bind(this, ws));
 
-    run.stderr.on('data', (data) => {
-      ws.send(data.toString('utf8'));
-    });
+    run.stderr.on('data', sendMsg.bind(this, ws));
 
     run.on('close', (code) => {
       if (code !== 0) {

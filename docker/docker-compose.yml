@@ -1,10 +1,12 @@
 version: "3"
 services:
   wdio:
-    build: .
+    image: wdio
     depends_on:
       - selenium
   selenium:
     image: selenium/standalone-chrome
     ports:
       - "4444:4444"
+    logging:
+      driver: "none"
