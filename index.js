@@ -8,10 +8,6 @@ const app = express();
 
 bb.extend(app);
 
-// app.use(function (req, res) {
-//   res.send({ msg: "hello" });
-// });
-
 function sendMsg (ws, data) {
   let msg = data.toString('utf8')
 
