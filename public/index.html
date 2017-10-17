@@ -4,7 +4,7 @@
       <meta charset="utf-8">
       <title>Try WebdriverIO</title>
       <style type="text/css">
-        @import url("http://fonts.googleapis.com/css?family=Lato:100,300,400,700");
+        /*@import url("http://fonts.googleapis.com/css?family=Lato:100,300,400,700");*/
 
         html, body {
           padding: 0;
@@ -89,8 +89,42 @@
           box-sizing: border-box;
           background: #F5FEFF;
         }
+
+
+        #share {
+          position: absolute;
+          top: 0;
+          right: 0%;
+          z-index: 10;
+          font-size: 1.3em;
+          padding: 10px 20px;
+          background: #363333;
+          color: #F5FEFF;
+          border: 0;
+        }
+        #share:hover,
+        #share:focus {
+          background: #686868;
+          cursor: pointer;
+        }
+        #shareUrl {
+          position: absolute;
+          top: 3rem;
+          right: 0;
+          z-index: 10;
+          font-size: 1.3em;
+          padding: 10px 20px;
+          background: #363333;
+          color: #F5FEFF;
+          border: 0;
+          border-left: 1px solid #E2E2E2;
+          border-bottom: 1px solid #9B9494;
+          display: none;
+        }
+        #shareUrl.show {
+          display: block;
+        }
       </style>
-      <link href="theme.css" rel="stylesheet">
       <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
       <link rel="icon" href="/favicon.ico" type="image/x-icon">
   </head>
@@ -117,10 +151,20 @@
         Run Test
       </button>
     </div>
+
     <div id="console" class="col">
       <h2>Console Output:</h2>
       <pre id="messages" class="tomorrow-night-eighties-ansi-theme"></pre>
     </div>
+
+    <button id="share" type="button">
+      Share
+    </button>
+    <div id="shareUrl">
+      <label for="sharable-url">Your url is:</label>
+      <input type="text" id="sharable-url" />
+    </div>
+
 
     <script src="ace.js" type="text/javascript" charset="utf-8"></script>
     <script>
@@ -135,19 +179,7 @@
     <script src="ansi_up.js"></script>
     <script src="app.js"></script>
     <!-- Piwik -->
-    <script type="text/javascript">
-      var _paq = _paq || [];
-      /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-      _paq.push(['trackPageView']);
-      _paq.push(['enableLinkTracking']);
-      (function() {
-        var u="//stats.klamp.in/";
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
-        _paq.push(['setSiteId', '7']);
-        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-      })();
-    </script>
+
     <!-- End Piwik Code -->
   </body>
 </html>

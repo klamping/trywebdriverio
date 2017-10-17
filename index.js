@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const bb = require('express-busboy');
 const startRun = require('./lib/startRun');
+const share = require('./lib/share');
 const WebSocket = require('ws');
 
 const app = express();
@@ -38,6 +39,27 @@ async function runTest (testDeets, ws) {
     ws.send('Something broke!')
   }
 }
+
+// save/share link
+app.post('/save', async function (req, res) {
+  testDeets = {
+    baseUrl: req.body.baseUrl,
+    file: req.body.code
+  }
+
+  // store to DB
+  let id = await share.create(testDeets);
+
+  // respond with ID of store
+  res.send(id)
+})
+
+app.get('/load/:testid', async function (req, res) {
+  // // load json data from db via ID
+  let content = await share.load(req.params.testid);
+
+  res.status(200).send(content[0]);
+})
 
 app.use(express.static('public'))
 

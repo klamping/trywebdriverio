@@ -2,6 +2,9 @@
 (() => {
   const messages = document.querySelector('#messages');
   const run = document.querySelector('#run');
+  const share = document.querySelector('#share');
+  const baseUrl = document.getElementById('baseUrl');
+  const url = new URL(document.location);
 
   let ws;
 
@@ -52,7 +55,7 @@
     }
 
     let data = {
-      baseUrl: document.getElementById('baseUrl').value,
+      baseUrl: baseUrl.value,
       code: editor.getValue()
     };
 
@@ -60,6 +63,43 @@
 
     ws.send(JSON.stringify(data));
   };
+
+  share.onclick = () => {
+    var data = new FormData();
+    data.append('baseUrl', baseUrl.value);
+    data.append('code', editor.getValue());
+
+    let req = fetch("/save", {
+      method: "POST",
+      body: data
+    });
+
+    req.then(function(response) {
+      return response.text();
+    }).then(function(id) {
+      let shareUrl = new URL('?share=' + id, document.location);
+      document.getElementById('shareUrl').className = "show";
+      document.getElementById('sharable-url').value = shareUrl.href;
+      history.pushState(null, null, shareUrl.href)
+    });
+  };
+
+  let params = url.searchParams;
+  let shareId = params.get("share")
+
+  if (shareId) {
+    let req = fetch("/load/" + shareId, {
+      method: "GET"
+    });
+
+    req.then(function(response) {
+      return response.json();
+    }).then(function(content) {
+      // load content in to areas
+      baseUrl.value = content.baseUrl;
+      editor.setValue(content.file)
+    });
+  }
 
   connect();
 })();
