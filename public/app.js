@@ -4,7 +4,6 @@
   const run = document.querySelector('#run');
   const share = document.querySelector('#share');
   const baseUrl = document.getElementById('baseUrl');
-  const url = new URL(document.location);
 
   let ws;
 
@@ -84,8 +83,32 @@
     });
   };
 
-  let params = url.searchParams;
-  let shareId = params.get("share")
+
+  function parse_query_string(query) {
+    var vars = query.split("&");
+    var query_string = {};
+    for (var i = 0; i < vars.length; i++) {
+      var pair = vars[i].split("=");
+      // If first entry with this name
+      if (typeof query_string[pair[0]] === "undefined") {
+        query_string[pair[0]] = decodeURIComponent(pair[1]);
+        // If second entry with this name
+      } else if (typeof query_string[pair[0]] === "string") {
+        var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
+        query_string[pair[0]] = arr;
+        // If third or later entry with this name
+      } else {
+        query_string[pair[0]].push(decodeURIComponent(pair[1]));
+      }
+    }
+    return query_string;
+  }
+
+  var query_string = "a=1&b=3&c=m2-m3-m4-m5";
+  var parsed_qs = parse_query_string(query_string);
+
+  var query = window.location.search.substring(1);
+  let shareId = parse_query_string(query).share;
 
   if (shareId) {
     let req = fetch("/load/" + shareId, {
