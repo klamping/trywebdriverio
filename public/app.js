@@ -44,7 +44,6 @@
     ws.onclose = () => {
       showMessage('WebSocket connection closed');
       ws = null;
-      document.getElementById('run').disabled = true;
     };
   };
 
@@ -103,9 +102,6 @@
     }
     return query_string;
   }
-
-  var query_string = "a=1&b=3&c=m2-m3-m4-m5";
-  var parsed_qs = parse_query_string(query_string);
 
   var query = window.location.search.substring(1);
   let shareId = parse_query_string(query).share;
