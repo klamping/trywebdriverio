@@ -4,8 +4,14 @@ const bb = require('express-busboy');
 const startRun = require('./lib/startRun');
 const share = require('./lib/share');
 const WebSocket = require('ws');
+const mustacheExpress = require('mustache-express');
+const defaults = require('./default-test');
 
 const app = express();
+
+app.engine('mustache', mustacheExpress());
+app.set('view engine', 'mustache');
+app.set('views', __dirname + '/views');
 
 bb.extend(app);
 
@@ -54,12 +60,16 @@ app.post('/save', async function (req, res) {
   res.send(id)
 })
 
-app.get('/load/:testid', async function (req, res) {
-  // // load json data from db via ID
-  let content = await share.load(req.params.testid);
+app.get('/', async function(req, res, next) {
+  res.render('index', defaults);
+});
 
-  res.status(200).send(content[0]);
-})
+app.get('/share/:tag', async function(req, res, next) {
+  // // load json data from db via ID
+  let content = await share.load(req.params.tag);
+
+  res.render('index', content[0]);
+});
 
 app.use(express.static('public'))
 

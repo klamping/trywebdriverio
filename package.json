@@ -23,6 +23,7 @@
     "express": "^4.15.4",
     "express-busboy": "^6.0.1",
     "express-session": "^1.15.6",
+    "mustache-express": "^1.2.5",
     "nedb": "^1.8.0",
     "promise": "^8.0.1",
     "temp": "^0.8.3",

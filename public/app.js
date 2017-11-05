@@ -75,7 +75,7 @@
     req.then(function(response) {
       return response.text();
     }).then(function(id) {
-      let shareUrl = new URL('?share=' + id, document.location);
+      let shareUrl = new URL('/share/' + id, document.location);
       document.getElementById('shareUrl').className = "show";
       document.getElementById('sharable-url').value = shareUrl.href;
       history.pushState(null, null, shareUrl.href)
