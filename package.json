@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,5 +31,7 @@
     "webdriverio": "^4.8.0",
     "ws": "^3.2.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  }
 }

@@ -3,6 +3,7 @@ body {
     padding: 0;
     margin: 0;
     color: #363333;
+    font-family: "Lato", sans-serif;
 }
 
 body {
@@ -29,7 +30,6 @@ h2,
     padding-left: 1em;
     background: #404969;
     color: #F5FEFF;
-    font-family: "Lato", sans-serif;
 }
 
 input {
@@ -123,4 +123,22 @@ input {
 
 #shareUrl.show {
     display: block;
+}
+
+
+.sponsor {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #ea5906;
+    z-index: 10;
+    padding: .5rem 1rem;
+    font-weight: bold;
+    color: #F5E1DA;
+    text-align: center;
+}
+.sponsor a {
+    color: #fff;
+    font-weight: normal;
 }
