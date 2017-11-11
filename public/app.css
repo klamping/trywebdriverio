@@ -98,6 +98,7 @@ input {
     background: #363333;
     color: #F5FEFF;
     border: 0;
+    height: 3rem;
 }
 
 #share:hover,
@@ -124,6 +125,11 @@ input {
 #shareUrl.show {
     display: block;
 }
+#shareUrl input {
+    width: 30rem;
+    margin-left: .5rem;
+    padding: .5rem;
+}
 
 
 .sponsor {
@@ -133,12 +139,16 @@ input {
     right: 0;
     background: #ea5906;
     z-index: 10;
-    padding: .5rem 1rem;
+    padding: 0 1rem;
     font-weight: bold;
     color: #F5E1DA;
-    text-align: center;
+    text-align: right;
 }
 .sponsor a {
+    padding: .5rem 0;
+    color: #F5E1DA;
+}
+.sponsor a:hover,
+.sponsor a:focus {
     color: #fff;
-    font-weight: normal;
 }
