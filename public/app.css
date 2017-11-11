@@ -147,6 +147,7 @@ input {
 .sponsor a {
     padding: .5rem 0;
     color: #F5E1DA;
+    display: inline-block;
 }
 .sponsor a:hover,
 .sponsor a:focus {
