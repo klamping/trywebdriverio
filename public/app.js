@@ -60,6 +60,8 @@
     document.getElementById('run').disabled = true;
 
     ws.send(JSON.stringify(data));
+
+    _paq.push(['trackEvent', 'Functionality', 'Button', 'Run']);
   };
 
   share.onclick = () => {
@@ -82,6 +84,8 @@
       input.select();
       history.pushState(null, null, shareUrl.href);
     });
+
+    _paq.push(['trackEvent', 'Functionality', 'Button', 'Share']);
   };
 
   connect();
