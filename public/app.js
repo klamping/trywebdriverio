@@ -10,12 +10,15 @@
   let ws;
 
   let waitingOnResults = false;
+  let waitingOnConnection = true;
+  let failedConnectionCount = 0;
 
   var a2h = new AnsiUp();
 
   // a2h.use_classes = true;
 
   let timeoutId;
+  let connectTimeoutId;
 
   function queueWaitingMessage () {
     if (timeoutId) {
@@ -24,7 +27,7 @@
     timeoutId = setTimeout(function () {
       showMessage('Waiting on test output...');
       queueWaitingMessage();
-    }, 1500);
+    }, 2500);
   }
 
   function startTest () {
@@ -54,6 +57,27 @@
     messages.scrollTop = messages.scrollHeight;
   };
 
+  function queueConnect () {
+    waitingOnConnection = true;
+
+    if (connectTimeoutId) {
+      clearTimeout(connectTimeoutId);
+    }
+
+    console.log("Connection attempt #", failedConnectionCount);
+
+    if (failedConnectionCount > 20) {
+      run.innerText = 'Disconnected';
+      showMessage('Unable to connect. Try again later ¯\\_(ツ)_/¯');
+      spinner.className = "";
+    } else {
+      failedConnectionCount++;
+      connectTimeoutId = setTimeout(function () {
+        connect();
+      }, 100);
+    }
+  }
+
   function connect () {
     if (ws) {
       ws.onerror = ws.onopen = ws.onclose = null;
@@ -62,24 +86,35 @@
 
     ws = new WebSocket(`ws://${location.host}`);
     ws.onmessage = (msg) => {
-      if (msg.data == 'Tests completed!') {
+      let message = msg.data.trim();
+      if (message == 'Tests completed!') {
         endTest();
-      } else {
+      } else if (message.length > 0) {
         queueWaitingMessage();
+        showMessage(message);
       }
-
-      showMessage(msg.data)
     };
-    ws.onerror = () => showMessage('Connection error');
+    ws.onerror = () => {
+      if (!waitingOnConnection) {
+        showMessage('Connection error');
+      }
+      console.log('Websocket connection error');
+    };
     ws.onopen = () => {
+      waitingOnConnection = false;
+      failedConnectionCount = 0;
       endTest();
     };
     ws.onclose = () => {
       if (waitingOnResults) {
-        showMessage('Connection closed. Please retry.');
+        showMessage('Connection closed. Try running test again after reconnecting.');
+        endTest();
       }
+      run.innerText = 'Reconnecting...';
+      run.disabled = true;
+      spinner.className = "show";
       ws = null;
-      endTest();
+      queueConnect();
     };
   };
 
@@ -128,5 +163,5 @@
       document.getElementById('shareUrl').className = "";
   }
 
-  connect();
+  queueConnect();
 })();

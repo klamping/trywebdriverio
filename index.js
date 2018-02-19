@@ -38,13 +38,22 @@ async function runTest (testDeets, ws) {
         // save broken screenshot?
       }
       // save data to database?
-      ws.send('Tests completed!');
+      if (ws) {
+        ws.send('Tests completed!');
+      }
     });
 
     ws.send('Tests started');
+
+    ws.onclose = () => {
+      console.log('client connection closed');
+      run.stdin.pause();
+      run.stderr.pause();
+      run.kill();
+      ws = null;
+    }
   } catch (err) {
-    console.error(err.stack)
-    ws.send('Something broke!')
+    console.log(err.stack);
   }
 }
 
