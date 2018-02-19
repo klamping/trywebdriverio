@@ -15,17 +15,32 @@
 
   // a2h.use_classes = true;
 
+  let timeoutId;
+
+  function queueWaitingMessage () {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(function () {
+      showMessage('Waiting on test output...');
+      queueWaitingMessage();
+    }, 1500);
+  }
+
   function startTest () {
     waitingOnResults = true;
     run.disabled = true;
     run.innerText = "Test Running";
     spinner.className = 'show';
+    queueWaitingMessage();
   }
   function endTest () {
     waitingOnResults = false;
     run.disabled = false;
     run.innerText = "Run Test";
     spinner.className = '';
+
+    clearTimeout(timeoutId);
   }
 
   const showMessage = (message) => {
@@ -49,6 +64,8 @@
     ws.onmessage = (msg) => {
       if (msg.data == 'Tests completed!') {
         endTest();
+      } else {
+        queueWaitingMessage();
       }
 
       showMessage(msg.data)
