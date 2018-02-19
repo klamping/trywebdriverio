@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "nodemon -e js,mustache --watch index.js --watch public --watch views index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

@@ -3,13 +3,30 @@
   const messages = document.querySelector('#messages');
   const run = document.querySelector('#run');
   const share = document.querySelector('#share');
+  const closeShare = document.querySelector('.close-share');
   const baseUrl = document.getElementById('baseUrl');
+  const spinner = document.getElementById('spinner');
 
   let ws;
+
+  let waitingOnResults = false;
 
   var a2h = new AnsiUp();
 
   // a2h.use_classes = true;
+
+  function startTest () {
+    waitingOnResults = true;
+    run.disabled = true;
+    run.innerText = "Test Running";
+    spinner.className = 'show';
+  }
+  function endTest () {
+    waitingOnResults = false;
+    run.disabled = false;
+    run.innerText = "Run Test";
+    spinner.className = '';
+  }
 
   const showMessage = (message) => {
     message = a2h.ansi_to_html(message);
@@ -31,19 +48,21 @@
     ws = new WebSocket(`ws://${location.host}`);
     ws.onmessage = (msg) => {
       if (msg.data == 'Tests completed!') {
-        document.getElementById('run').disabled = false;
+        endTest();
       }
 
       showMessage(msg.data)
     };
-    ws.onerror = () => showMessage('WebSocket error');
+    ws.onerror = () => showMessage('Connection error');
     ws.onopen = () => {
-      // undisable button
-      document.getElementById('run').disabled = false;
+      endTest();
     };
     ws.onclose = () => {
-      showMessage('WebSocket connection closed');
+      if (waitingOnResults) {
+        showMessage('Connection closed. Please retry.');
+      }
       ws = null;
+      endTest();
     };
   };
 
@@ -57,9 +76,9 @@
       code: editor.getValue()
     };
 
-    document.getElementById('run').disabled = true;
-
     ws.send(JSON.stringify(data));
+
+    startTest();
 
     _paq.push(['trackEvent', 'Functionality', 'Button', 'Run']);
   };
@@ -87,6 +106,10 @@
 
     _paq.push(['trackEvent', 'Functionality', 'Button', 'Share']);
   };
+
+  closeShare.onclick = () => {
+      document.getElementById('shareUrl').className = "";
+  }
 
   connect();
 })();
