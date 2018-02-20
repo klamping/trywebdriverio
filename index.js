@@ -6,6 +6,10 @@ const share = require('./lib/share');
 const WebSocket = require('ws');
 const mustacheExpress = require('mustache-express');
 const defaults = require('./default-test');
+const archiver = require('archiver');
+const archive = archiver('zip');
+const createTempDirectory = require('./lib/createTempDirectory');
+const mime = require('mime');
 
 const app = express();
 
@@ -22,8 +26,6 @@ function sendMsg (ws, data) {
     ws.send(data.toString('utf8'));
   }
 }
-
-
 
 async function runTest (testDeets, ws) {
   try {
@@ -69,6 +71,32 @@ app.post('/save', async function (req, res) {
 
   // respond with ID of store
   res.send(id)
+});
+
+app.post('/download', async function (req, res) {
+  testDeets = {
+    baseUrl: req.body.baseUrl,
+    file: req.body.code
+  }
+
+  console.log("index.js :82", req.body);
+
+  // generate directory
+  let dir = createTempDirectory(req.body.baseUrl, req.body.code);
+
+  const mimetype = mime.lookup('.zip');
+  res.setHeader('Content-disposition', 'attachment; filename=wdio.zip');
+  res.setHeader('Content-type', mimetype);
+
+  console.log("index.js :88", 'building zip');
+
+  // send file in zip format
+  archive.pipe(res);
+
+  // zip directory
+  archive.directory(dir, false);
+
+  archive.finalize();
 })
 
 app.get('/', async function(req, res, next) {

@@ -6,10 +6,12 @@
   const closeShare = document.querySelector('.close-share');
   const baseUrl = document.getElementById('baseUrl');
   const spinner = document.getElementById('spinner');
+  const download = document.getElementById('download');
 
   let ws;
 
   let waitingOnResults = false;
+  let failedResultsCount = 0;
   let waitingOnConnection = true;
   let failedConnectionCount = 0;
 
@@ -24,10 +26,19 @@
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
-    timeoutId = setTimeout(function () {
-      showMessage('Waiting on test output...');
-      queueWaitingMessage();
-    }, 2500);
+
+    failedResultsCount++;
+
+    if (failedResultsCount > 20) {
+      run.innerText = 'Test run error';
+      showMessage('\n\nNo results after 60 seconds. Something probably went wrong. Refresh the page and try again.\n');
+      spinner.className = "";
+    } else {
+      timeoutId = setTimeout(function () {
+        showMessage('Waiting on test output...');
+        queueWaitingMessage();
+      }, 3000);
+    }
   }
 
   function startTest () {
@@ -66,7 +77,7 @@
 
     console.log("Connection attempt #", failedConnectionCount);
 
-    if (failedConnectionCount > 20) {
+    if (failedConnectionCount > 30) {
       run.innerText = 'Disconnected';
       showMessage('Unable to connect. Try again later ¯\\_(ツ)_/¯');
       spinner.className = "";
@@ -93,6 +104,8 @@
         queueWaitingMessage();
         showMessage(message);
       }
+
+      failedResultsCount = 0;
     };
     ws.onerror = () => {
       if (!waitingOnConnection) {
@@ -104,6 +117,8 @@
       waitingOnConnection = false;
       failedConnectionCount = 0;
       endTest();
+
+      failedResultsCount = 0;
     };
     ws.onclose = () => {
       if (waitingOnResults) {
@@ -161,6 +176,10 @@
 
   closeShare.onclick = () => {
       document.getElementById('shareUrl').className = "";
+  }
+
+  download.onclick = () => {
+    document.getElementById('thecode').innerText = editor.getValue();
   }
 
   queueConnect();

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon -e js,mustache --watch index.js --watch public --watch views index.js",
+    "start": "nodemon -e js,mustache --watch index.js --watch lib --watch public --watch views index.js",
+    "buildDocker": "cd docker && docker build -t wdio .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,15 +19,18 @@
   },
   "homepage": "https://github.com/klamping/trywebdriverio#readme",
   "dependencies": {
+    "archiver": "^2.1.1",
     "body-parser": "^1.18.1",
     "busboy": "^0.2.14",
     "dockerode": "^2.5.1",
     "express": "^4.15.4",
     "express-busboy": "^6.0.1",
     "express-session": "^1.15.6",
+    "jszip": "^3.1.5",
     "mustache-express": "^1.2.5",
     "nedb": "^1.8.0",
     "promise": "^8.0.1",
+    "replace": "^0.3.0",
     "temp": "^0.8.3",
     "webdriverio": "^4.8.0",
     "ws": "^3.2.0"

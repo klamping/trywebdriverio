@@ -52,6 +52,11 @@ input {
     flex: 1 0;
     margin: 0;
 }
+#thecode {
+  position: absolute;
+  display: none;
+  visibility: hidden;
+}
 
 #run {
     position: absolute;
@@ -76,6 +81,30 @@ input {
 #run[disabled] {
     cursor: progress;
     background: #686868;
+}
+
+#download {
+  position: absolute;
+  left: 53px;
+  bottom: 0;
+  right: 0;
+  padding: .5em 2em;
+  text-align: center;
+  display: block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: calc(100% - 53px);
+  border: solid #686868;
+  border-width: 1px 0 0;
+  background: #363333;
+  cursor: pointer;
+  font-size: 1.1em;
+  color: #FFF;
+}
+#download:hover,
+#download:focus {
+  border-color: #fff;
+  background: #686868;
 }
 
 #console {
@@ -172,6 +201,17 @@ input {
     color: #fff;
 }
 
+#github {
+    position: absolute;
+    bottom: 5px;
+    left: 10px;
+    z-index: 10;
+    opacity: .5;
+}
+#github:hover,
+#github:focus {
+    opacity: 1;
+}
 
 
 .sk-circle {
@@ -293,4 +333,16 @@ input {
     -webkit-transform: scale(1);
             transform: scale(1);
   }
+}
+
+.icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+  position: relative;
+  top: 3px;
+  margin-left: .5em;
 }
