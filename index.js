@@ -79,8 +79,6 @@ app.post('/download', async function (req, res) {
     file: req.body.code
   }
 
-  console.log("index.js :82", req.body);
-
   // generate directory
   let dir = createTempDirectory(req.body.baseUrl, req.body.code);
 
@@ -88,9 +86,17 @@ app.post('/download', async function (req, res) {
   res.setHeader('Content-disposition', 'attachment; filename=wdio.zip');
   res.setHeader('Content-type', mimetype);
 
-  console.log("index.js :88", 'building zip');
+  archive.on('error', function(err) {
+    res.status(500).send({error: err.message});
+  });
 
-  // send file in zip format
+  //on stream closed we can end the request
+  archive.on('end', function() {
+    console.log('Archive wrote %d bytes', archive.pointer());
+  });
+
+  res.attachment('wdio.zip');
+
   archive.pipe(res);
 
   // zip directory

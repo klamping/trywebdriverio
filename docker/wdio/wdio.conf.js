@@ -3,9 +3,6 @@ exports.config = {
   // with "/", then the base url gets prepended.
   baseUrl: 'theBaseUrl',
 
-  // host: 'selenium',
-  // port: 4444,
-
   //
   // ==================
   // Specify Test Files

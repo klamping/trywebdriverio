@@ -35,7 +35,9 @@
       spinner.className = "";
     } else {
       timeoutId = setTimeout(function () {
-        showMessage('Waiting on test output...');
+        let msg = 'Waiting on test output.';
+        // msg += failedResultsCount === 1 ? ' This may take a minute' : '..';
+        showMessage(msg);
         queueWaitingMessage();
       }, 3000);
     }
@@ -179,7 +181,7 @@
   }
 
   download.onclick = () => {
-    document.getElementById('thecode').innerText = editor.getValue();
+    document.getElementById('thecode').innerHTML = editor.getValue();
   }
 
   queueConnect();
