@@ -1,5 +1,5 @@
 Next Step:
-- Download files option
+- download click event tracker
 
 Further on:
 - Include examples

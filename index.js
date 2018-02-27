@@ -9,7 +9,6 @@ const defaults = require('./default-test');
 const archiver = require('archiver');
 const archive = archiver('zip');
 const createTempDirectory = require('./lib/createTempDirectory');
-const mime = require('mime');
 
 const app = express();
 
@@ -82,17 +81,8 @@ app.post('/download', async function (req, res) {
   // generate directory
   let dir = createTempDirectory(req.body.baseUrl, req.body.code);
 
-  const mimetype = mime.lookup('.zip');
-  res.setHeader('Content-disposition', 'attachment; filename=wdio.zip');
-  res.setHeader('Content-type', mimetype);
-
   archive.on('error', function(err) {
     res.status(500).send({error: err.message});
-  });
-
-  //on stream closed we can end the request
-  archive.on('end', function() {
-    console.log('Archive wrote %d bytes', archive.pointer());
   });
 
   res.attachment('wdio.zip');
