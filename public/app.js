@@ -182,6 +182,8 @@
 
   download.onclick = () => {
     document.getElementById('thecode').innerHTML = editor.getValue();
+
+    _paq.push(['trackEvent', 'Functionality', 'Button', 'Download']);
   }
 
   queueConnect();

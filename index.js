@@ -7,7 +7,6 @@ const WebSocket = require('ws');
 const mustacheExpress = require('mustache-express');
 const defaults = require('./default-test');
 const archiver = require('archiver');
-const archive = archiver('zip');
 const createTempDirectory = require('./lib/createTempDirectory');
 
 const app = express();
@@ -80,6 +79,8 @@ app.post('/download', async function (req, res) {
 
   // generate directory
   let dir = createTempDirectory(req.body.baseUrl, req.body.code);
+
+  const archive = archiver('zip');
 
   archive.on('error', function(err) {
     res.status(500).send({error: err.message});
