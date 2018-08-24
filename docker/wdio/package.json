@@ -20,10 +20,10 @@
     "chai": "^4.1.2",
     "chai-webdriverio": "^0.4.2",
     "mocha": "^5.2.0",
-    "wdio-json-reporter": "^0.2.1",
-    "wdio-mocha-framework": "^0.5.11",
-    "wdio-selenium-standalone-service": "0.0.9",
+    "wdio-json-reporter": "^0.3.1",
+    "wdio-mocha-framework": "^0.6.2",
+    "wdio-selenium-standalone-service": "0.0.10",
     "wdio-spec-reporter": "^0.1.2",
-    "webdriverio": "^4.10.2"
+    "webdriverio": "^4.13.2"
   }
 }
