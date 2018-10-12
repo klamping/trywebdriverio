@@ -26,6 +26,12 @@ function sendMsg (ws, data) {
 }
 
 async function runTest (testDeets, ws) {
+  if (testDeets.baseUrl.match(/file:\/\//g)) {
+    ws.send('Error: Attempting to access file:// resources.');
+    ws.send('Tests completed!');
+    return;
+  }
+
   try {
     let {runId, run} = await startRun(testDeets.baseUrl, testDeets.code);
 
